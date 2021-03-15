@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<input>
+		<question> 
+			<message inputId="0">
+				<phrase>dein name</phrase>
+				<phrase>ihr name</phrase>
+				<phrase>heiß du</phrase>
+				<phrase>heiß sie</phrase>
+				<phrase>nenn sie</phrase>
+				<phrase>nenn dich</phrase>
+			</message>
+			<message inputId="1">
+				<phrase>joris hat,einen cock</phrase>
+				<phrase>joris,schlong</phrase>	
+				<phrase>joris,schwanz</phrase>	
+				<phrase>joris,schlauch</phrase>	
+			</message>
+		</question>
+		<statement>
+		</statement>
+		<exclamation>
+			<message inputId="2">
+				<phrase>tschüss</phrase>
+				<phrase>tschau</phrase>
+				<phrase>goodbye</phrase>
+				<phrase>bye</phrase>
+			</message>
+		</exclamation>
+	</input>
+	<output>
+		<answer outputId="0">
+			System.out.println("Mein Name ist Chatbot in cool");
+		</answer>
+		<answer outputId="1">
+			System.out.println("Ich liebe Joris seinen Schwanz");
+		</answer>
+		<answer outputId="2">
+			System.exit(0);
+		</answer>
+	</output>
+</root>
