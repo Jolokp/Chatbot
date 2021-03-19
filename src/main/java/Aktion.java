@@ -1,5 +1,4 @@
 package main.java;
-
 public class Aktion
 {
 	private String[] satz;
