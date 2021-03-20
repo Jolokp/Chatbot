@@ -138,8 +138,14 @@ public class Reagierer {
                 
             }
             
-            //bearbeiten von sinn eines satzes
-            answer += reagieren(value, sätze.get(i));
+            if (correct)
+            {
+                //bearbeiten von sinn eines satzes
+                answer += reagieren(value, sätze.get(i));
+            } else
+            {
+                answer += "Keine Ahnung tbh";
+            }
             
         }
 

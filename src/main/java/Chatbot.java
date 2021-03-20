@@ -7,10 +7,15 @@ import java.util.Arrays;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import java.io.*;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 public class Chatbot 
 {
     
+    // javac -d classes -classpath classes src\main\java\Reagierer.java
+    // javac -d classes -classpath classes src\main\java\Chatbot.java
+    // java -classpath classes;src main.java.Chatbot
 
     private static Character[] charList = new Character[]{'.','!','?'};
     
@@ -27,10 +32,11 @@ public class Chatbot
         
         
         ArrayList<String[]> sätze = new ArrayList<>();
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in, "iso-8859-1");
         
         for(int y = 0; y < 2; y++)
         {
+
             InputStream inputStream = Chatbot.class.getResourceAsStream("/main/resources/data.xml");
 
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -42,9 +48,9 @@ public class Chatbot
             n = n.toLowerCase();
             String[] aufgeteilt = n.split(" "); 
             int lastSatz = 0;
-            for(int i = 0; i < aufgeteilt.length; i++)
+            for (int i = 0; i < aufgeteilt.length; i++)
             {
-                if(Arrays.asList(charList).contains(aufgeteilt[i].charAt(aufgeteilt[i].length() - 1)))
+                if (Arrays.asList(charList).contains(aufgeteilt[i].charAt(aufgeteilt[i].length() - 1)))
                 {
                     //if(Arrays.asList(charList).contains(aufgeteilt[i].charAt(aufgeteilt[i].length() - 1
                     //Speichern neuen Satz
