@@ -1,58 +1,44 @@
 package main.java;
 
 import java.util.Scanner;
-import java.util.Random;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-//import org.xml.sax.SAXException;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
-//import javax.tools.*;
 import java.io.*;
-import java.net.URL;
 
 public class Chatbot 
 {
-    private static File inputFile;
-    private static File dir;
-    private static DocumentBuilderFactory dbFactory;
-    private static DocumentBuilder dBuilder;
-    private static Document doc;
+    
 
     private static Character[] charList = new Character[]{'.','!','?'};
-    private Random r = new Random();
     
     
     public static void main(String[] args) throws Exception
     {
         chatbotStart();
     }
-    // public Chatbot() throws Exception
-    // {
-        
-    // }
     
     public static void chatbotStart() throws Exception
     {
-        InputStream inputStream = Chatbot.class.getResourceAsStream("/main/resources/data.xml");
-
-        dbFactory = DocumentBuilderFactory.newInstance();
-        dBuilder = dbFactory.newDocumentBuilder();
-        doc = dBuilder.parse(inputStream);
-        doc.getDocumentElement().normalize();
+        
         
         
         
         ArrayList<String[]> sätze = new ArrayList<>();
+        Scanner scanner = new Scanner(System.in);
         
-        //for(int y = 0; y < 3; y++)
-        //{
+        for(int y = 0; y < 2; y++)
+        {
+            InputStream inputStream = Chatbot.class.getResourceAsStream("/main/resources/data.xml");
+
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(inputStream);
+            doc.getDocumentElement().normalize();
             
-            Scanner scanner = new Scanner(System.in);
             String n = scanner.nextLine();
-            //scanner.close();
-            //scanner = null;
             n = n.toLowerCase();
             String[] aufgeteilt = n.split(" "); 
             int lastSatz = 0;
@@ -82,10 +68,13 @@ public class Chatbot
                 }
             }
                 
-            Interpreter interpreter = new Interpreter(doc, sätze);
-            interpreter.interpretieren();
+            Reagierer reagierer = new Reagierer(doc, sätze);
+            System.out.println(reagierer.interpretieren());
             sätze.clear();
-        //}
+            inputStream.close();
+        }
+
+        scanner.close();
     }
     
 

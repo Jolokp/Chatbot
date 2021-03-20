@@ -1,14 +1,8 @@
 package main.java;
 public class Aktion
 {
-	private String[] satz;
-	public Aktion(String[] satz)
-	{
-		this.satz = satz;
-		execute();
-	}
-
-	public static void execute()
+	private static String[] satz;
+	public static void main(String[] args)
 	{
 			System.out.println("Mein Name ist Chatbot in cool");
 		}
