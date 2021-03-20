@@ -7,8 +7,6 @@ import java.util.Arrays;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import java.io.*;
-import java.net.URL;
-import java.net.URLClassLoader;
 
 public class Chatbot 
 {
@@ -32,7 +30,7 @@ public class Chatbot
         
         
         ArrayList<String[]> sätze = new ArrayList<>();
-        Scanner scanner = new Scanner(System.in, "iso-8859-1");
+        Scanner scanner = new Scanner(System.in);
         
         for(int y = 0; y < 2; y++)
         {

@@ -191,11 +191,7 @@ public class Reagierer {
         writer.write("}\n}");
         writer.close();
 
-        //Compiled die oben erstellte Java datei
-        Process compile = Runtime.getRuntime().exec("cmd /c javac \"" + action.getCanonicalPath() + "\"");
         
-        // Warten bis der Process fertig ist
-        compile.waitFor();
         
 
         String path = action.getCanonicalPath();
@@ -228,7 +224,15 @@ public class Reagierer {
             rootPath += splitPath[k] + "\\";
         }
 
-        String command = "java -cp \"" + rootPath + "\" " + classPath;
+
+        //Compiled die oben erstellte Java datei
+        Process compile = Runtime.getRuntime().exec("cmd /c javac -d classes -classpath classes \"" + action.getCanonicalPath() + "\"");
+        
+        // Warten bis der Process fertig ist
+        compile.waitFor();
+
+
+        String command = "java -classpath classes " + classPath;
         String output = "";
         ProcessBuilder pBuilder = new ProcessBuilder();
         pBuilder.command("cmd.exe", "/c", command);
