@@ -184,6 +184,7 @@ public class Reagierer {
             "package main.java;\n"
           + "public class Aktion\n" 
           + "{\n"
+          +     "\tprivate Runtime r;\n"
           +     "\tprivate static String[] satz;\n"
           +     "\tpublic static void main(String[] args)\n"
           +     "\t{");
