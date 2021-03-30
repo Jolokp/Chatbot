@@ -165,7 +165,11 @@ public class Reagierer {
         for (int j = 0; j < aList.getLength(); j++) 
         {
             Element e = (Element) aList.item(j);
-            if(e.getAttribute("outputId").equals(inputId)) 
+            if(e.getAttribute("outputId").equals("2"))
+            {
+                System.exit(0);
+            }
+            else if(e.getAttribute("outputId").equals(inputId)) 
             {
                 code = e.getTextContent(); 
                 break;
