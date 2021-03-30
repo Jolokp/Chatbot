@@ -14,142 +14,117 @@ import org.w3c.dom.*;
 
 public class Reagierer {
     
-    private Character[] charList = new Character[]{'.','!','?'};
-    private ArrayList<String[]> sätze;
+    
     private Document doc;
 
-    public Reagierer(Document doc, ArrayList<String[]> sätze)
+    public Reagierer(Document doc)
     {
         this.doc = doc;
-        this.sätze = sätze;
     }
 
-    public String interpretieren() throws Exception 
+    public String interpretieren(String[] satz, String art) throws Exception 
     {
         String answer = "";
-        String art = "";
         
         
-        for(int i = 0; i < sätze.size(); i++) 
+       
+        Element base = (Element) doc.getElementsByTagName(art).item(0);
+        NodeList nList = base.getElementsByTagName("phrase");
+        boolean correct = true;
+        Node value = null;
+        
+        
+        
+        
+        //{("joris","hat"),("cock","nicht")}
+        
+        //for Schleife zum durchgehen der Phrasen
+        for(int a = 0; a < nList.getLength(); a++)
         {
-            if(sätze.get(i)[0].equals(Character.toString(charList[0]))) 
-            {
-                art = "statement";
-            }
-            
-            else if(sätze.get(i)[0].equals(Character.toString(charList[1]))) 
-            {
-                art = "exclamation";
-            }
-            
-            else if(sätze.get(i)[0].equals(Character.toString(charList[2]))) 
-            {
-                art = "question";
-            }
-        
-            else
-            {
-                //art = "messages";
-                System.out.println("Ok");
-            }
-        
-            Element base = (Element) doc.getElementsByTagName(art).item(0);
-            NodeList nList = base.getElementsByTagName("phrase");
-            boolean correct = true;
-            Node value = null;
-            
-            
-            
-            
+            //Variable um eventuell fortschreiten in der phrase zu speichern 
             //{("joris","hat"),("cock","nicht")}
+            //von der ersten runden klammer dauerhaft in die zweite
+            int aktuellesD = 0;
             
-            //for Schleife zum durchgehen der Phrasen
-            for(int a = 0; a < nList.getLength(); a++)
+            //aufteilen der phrase am Komma
+            ArrayList<String[]> satzteile = new ArrayList<>();
+            String[] komma = nList.item(a).getTextContent().split(",");
+            
+            //einzelne teile nach spaces getrennt
+            for(int b = 0; b < komma.length; b++)
             {
-                //Variable um eventuell fortschreiten in der phrase zu speichern 
-                //{("joris","hat"),("cock","nicht")}
-                //von der ersten runden klammer dauerhaft in die zweite
-                int aktuellesD = 0;
+                String[] spaces = komma[b].split(" ");
+                satzteile.add(spaces);
+            }
+            
+            //for Schleife zum durchgehen des Arrays hier steht n = 1, weil der index 0
+            //im array das satzzeichen ist.
+            for(int c = 1; c < satz.length; c++)
+            {
                 
-                //aufteilen der phrase am Komma
-                ArrayList<String[]> satzteile = new ArrayList<>();
-                String[] komma = nList.item(a).getTextContent().split(",");
+                correct = true;
                 
-                //einzelne teile nach spaces getrennt
-                for(int b = 0; b < komma.length; b++)
+                //{("joris","hat"),("cock","nicht")} erste runde klammer überprüft und richtig 
+                //setzt bei aktuellesd = 1 wieder ein in arraylist
+                for(int d = aktuellesD; d < satzteile.size(); d++)
                 {
-                    String[] spaces = komma[b].split(" ");
-                    satzteile.add(spaces);
-                }
-                
-                //for Schleife zum durchgehen des Arrays hier steht n = 1, weil der index 0
-                //im array das satzzeichen ist.
-                for(int c = 1; c < sätze.get(i).length; c++)
-                {
-                    
-                    correct = true;
-                    
-                    //{("joris","hat"),("cock","nicht")} erste runde klammer überprüft und richtig 
-                    //setzt bei aktuellesd = 1 wieder ein in arraylist
-                    for(int d = aktuellesD; d < satzteile.size(); d++)
+                    //geht aktuelle runde klammer durch und vergleicht parallel mit worten des satzes
+                    for(int e = 0; e < satzteile.get(d).length; e++)
                     {
-                        //geht aktuelle runde klammer durch und vergleicht parallel mit worten des satzes
-                        for(int e = 0; e < satzteile.get(d).length; e++)
+                        try 
                         {
-                            try 
+                            //parallele überprüfung mit der gesamten runden klammer 
+                            //wenn nicht gleich wird zum nächsten wort des satzes gesprungen
+                            if(!satzteile.get(d)[e].equals(satz[c+e]))
                             {
-                                //parallele überprüfung mit der gesamten runden klammer 
-                                //wenn nicht gleich wird zum nächsten wort des satzes gesprungen
-                                if(!satzteile.get(d)[e].equals(sätze.get(i)[c+e]))
-                                {
-                                    correct = false;
-                                    break;
-                                }
-                            }
-                            catch(Exception x) 
-                            {
-                                //{("joris","hat"),("cock","nicht")} Joris hat einen cock.
-                                //tritt ein wenn runde klammer über den Satz hinausgeht
                                 correct = false;
                                 break;
                             }
                         }
-                        if(!correct) 
+                        catch(Exception x) 
                         {
-                           break; 
+                            //{("joris","hat"),("cock","nicht")} Joris hat einen cock.
+                            //tritt ein wenn runde klammer über den Satz hinausgeht
+                            correct = false;
+                            break;
                         }
-                        
-                        //falls runde klammer erfolgreich verglichen und richtig ist wird nächste runde klammer 
-                        //genommen
-                        aktuellesD++;
-                        
-                        //schon überprüfte worte werden mit der anzahl der elemente in der runden Klammer
-                        //übersprungen
-                        c = c + satzteile.get(d).length - 1;
-                        break;
                     }
-                }
-                //die gesamte phrase wurde erfolgreich durchgegangen
-                if(correct)
-                {
-                    value = nList.item(a);
+                    if(!correct) 
+                    {
+                        break; 
+                    }
+                    
+                    //falls runde klammer erfolgreich verglichen und richtig ist wird nächste runde klammer 
+                    //genommen
+                    aktuellesD++;
+                    
+                    //schon überprüfte worte werden mit der anzahl der elemente in der runden Klammer
+                    //übersprungen
+                    c = c + satzteile.get(d).length - 1;
                     break;
                 }
-                
             }
-            
-            if (correct)
+            //die gesamte phrase wurde erfolgreich durchgegangen
+            if(correct)
             {
-                //bearbeiten von sinn eines satzes
-                answer += reagieren(value, sätze.get(i));
-            } else
-            {
-                answer += "Keine Ahnung tbh";
+                value = nList.item(a);
+                break;
             }
             
         }
+        
+        if (correct)
+        {
+            //bearbeiten von sinn eines satzes
+            answer += reagieren(value, satz);
+        } else
+        {
+            answer += "Keine Ahnung tbh";
+        }
+        
+    
 
-        return answer;
+    return answer;
     }
     
     public String reagieren(Node phrase, String[] satz) throws IOException, URISyntaxException, InterruptedException
@@ -157,21 +132,24 @@ public class Reagierer {
         //Die inputId rausfinden
         Element parent = (Element) phrase.getParentNode();
         String inputId = parent.getAttribute("inputId");
-        
+        //Temporärer Exit
+        if(inputId.equals("end")) 
+        {
+            System.exit(0);
+        }
+    
         //den entsprechenden Inhalt ermitteln
         NodeList aList = doc.getElementsByTagName("answer");
         String code = "";
+        String imports = "";
         
         for (int j = 0; j < aList.getLength(); j++) 
         {
             Element e = (Element) aList.item(j);
-            if(e.getAttribute("outputId").equals("2")) 
+            if(e.getAttribute("outputId").equals(inputId)) 
             {
-                System.exit(0);
-            }
-            else if(e.getAttribute("outputId").equals(inputId)) 
-            {
-                code = e.getTextContent(); 
+                imports = e.getElementsByTagName("imports").item(0).getTextContent();
+                code = e.getElementsByTagName("code").item(0).getTextContent();
                 break;
             }
         }
@@ -184,14 +162,15 @@ public class Reagierer {
 
         //Die Java datei füllen
         PrintWriter writer = new PrintWriter(action, "UTF-8");
+        writer.write("package main.java;\n");
+        writer.write(imports);
         writer.write(
-            "package main.java;\n"
-          + "public class Aktion\n" 
+            "public class Aktion\n" 
           + "{\n"
-          +     "\tprivate Runtime r;\n"
           +     "\tprivate static String[] satz;\n"
           +     "\tpublic static void main(String[] args)\n"
-          +     "\t{");
+          +     "\t{\n"
+          +         "\t\tsatz = args;");
         writer.write(code);
         writer.write("}\n}");
         writer.close();
@@ -238,6 +217,10 @@ public class Reagierer {
 
 
         String command = "java -classpath classes " + classPath;
+        for(String s:satz)
+        {
+            command += " " + s;
+        }
         String output = "";
         ProcessBuilder pBuilder = new ProcessBuilder();
         pBuilder.command("cmd.exe", "/c", command);

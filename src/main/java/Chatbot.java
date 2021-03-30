@@ -30,11 +30,18 @@ public class Chatbot
         
         
         ArrayList<String[]> sätze = new ArrayList<>();
-        Scanner scanner = new Scanner(System.in);
-        
-        for(int y = 0; y < 2; y++)
+        Scanner scanner = new Scanner(System.in, "Cp850");
+        Runtime.getRuntime().addShutdownHook(new Thread()
         {
+          public void run()
+          {
+            scanner.close();
+          }
+        });
 
+        while(true)
+        {
+            
             InputStream inputStream = Chatbot.class.getResourceAsStream("/main/resources/data.xml");
 
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -71,18 +78,53 @@ public class Chatbot
                     sätze.add(joined);
                 }
             }
+            if(sätze.size() == 0)
+            {
+                String[] empty = new String[]{""};
+                String[] neu = new String[aufgeteilt.length + 1];
+                System.arraycopy(empty,0,neu,0,1);
+                System.arraycopy(aufgeteilt,0,neu,1,aufgeteilt.length);
+                sätze.add(aufgeteilt);
+            }
+            String art = "";
+
+            for(int i = 0; i < sätze.size(); i++) 
+            {
+                if(sätze.get(i)[0].equals(Character.toString(charList[0]))) 
+                {
+                    art = "statement";
+                }
                 
-            Reagierer reagierer = new Reagierer(doc, sätze);
-            System.out.println(reagierer.interpretieren());
+                else if(sätze.get(i)[0].equals(Character.toString(charList[1]))) 
+                {
+                    art = "exclamation";
+                }
+                
+                else if(sätze.get(i)[0].equals(Character.toString(charList[2]))) 
+                {
+                    art = "question";
+                }
+            
+                else
+                {
+                    //art = "messages";
+                    System.out.println("Ok");
+                }
+
+                Reagierer reagierer = new Reagierer(doc);
+                System.out.print(reagierer.interpretieren(sätze.get(i), art));
+
+                
+            }  
+            
+            System.out.println();
             sätze.clear();
             inputStream.close();
+            
         }
 
-        scanner.close();
+        
     }
-    
-
-    
     
     
 }

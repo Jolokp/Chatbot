@@ -21,6 +21,9 @@
 		</statement>
 		<exclamation>
 			<message inputId="2">
+				<phrase>gib,zahl</phrase>
+			</message>
+			<message inputId="end">
 				<phrase>tschüss</phrase>
 				<phrase>tschau</phrase>
 				<phrase>goodbye</phrase>
@@ -30,13 +33,60 @@
 	</input>
 	<output>
 		<answer outputId="0">
-			System.out.println("Mein Name ist Chatbot in cool");
+			<imports>
+				
+			</imports>
+			<code>
+				System.out.println("Mein Name ist Chatbot in cool");
+			</code>
 		</answer>
 		<answer outputId="1">
-			System.out.println("Ich liebe Joris seinen Schwanz");
+			<imports>
+				
+			</imports>
+			<code>
+				System.out.println("Ich liebe Joris seinen Schwanz");
+			</code>
 		</answer>
 		<answer outputId="2">
-			System.exit(0);
+			<imports>
+				import java.util.Random;
+			</imports>
+			<code>
+				Random r = new Random();
+				int z = 0;
+				for(int i = 1; i &lt; satz.length; i++)
+				{
+					if(satz[i].equals("zwischen") || satz[i].equals("von"))
+					{
+						int untereGr = 0;
+						int obereGr = 0;
+						int j = 0;
+						for(int k = i + 1; k &lt; satz.length; k++)
+						{
+							try
+							{
+								untereGr = Integer.parseInt(satz[k]);
+								j = k;
+								break;
+							} catch (NumberFormatException n1) {}
+								
+							
+						}
+						for(int t = j + 1; t &lt; satz.length; t++)
+						{
+							try
+							{
+								obereGr = Integer.parseInt(satz[t]);
+								break;
+							} catch (NumberFormatException n2) {}
+						}
+						z = r.nextInt(obereGr-untereGr) + untereGr;
+						break;
+					} 
+				}
+				System.out.println(z);
+			</code>
 		</answer>
 	</output>
 </root>
